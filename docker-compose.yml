@@ -1,0 +1,12 @@
+services:
+  azp-agent:
+    image: azp-agent:linux
+    build:
+      context: .
+      dockerfile: ./azp-agent-linux.dockerfile
+    restart: always
+    environment:
+      - AZP_URL=${AZP_URL}
+      - AZP_TOKEN=${AZP_TOKEN}
+      - AZP_POOL=${AZP_POOL}
+
