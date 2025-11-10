@@ -20,7 +20,7 @@ RUN chmod +x ./start.sh
 
 RUN adduser -D agent
 RUN chown agent ./
-# USER user
+# USER agent
 # Another option is to run the agent as root.
 ENV AGENT_ALLOW_RUNASROOT="true"
 
