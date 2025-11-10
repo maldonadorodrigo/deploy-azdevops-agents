@@ -1,28 +1,32 @@
-FROM python:3-alpine
-ENV TARGETARCH="linux-musl-x64"
+FROM ubuntu:24.04
+ENV TARGETARCH="linux-x64"
+# For ARM: "linux-arm", "linux-arm64"
 
-# Another option:
-# FROM arm64v8/alpine
-# ENV TARGETARCH="linux-musl-arm64"
+RUN apt update && \
+    apt upgrade -y && \
+    apt install -y \
+        curl \
+        git \
+        jq \
+        libicu74 \
+        ca-certificates \
+        sudo \
+        bash \
+        docker.io \
+        python3 \
+        python3-pip
 
-RUN apk update && \
-  apk upgrade && \
-  apk add bash curl gcc git icu-libs jq musl-dev python3-dev libffi-dev openssl-dev cargo make docker-cli
-
-# Install Azure CLI
-RUN pip install --upgrade pip
-RUN pip install azure-cli
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 WORKDIR /azp/
 
-COPY ./start.sh ./
+COPY ./start.sh ./ 
 RUN chmod +x ./start.sh
 
-RUN adduser -D agent
-RUN chown agent ./
-# USER agent
-# Another option is to run the agent as root.
+RUN useradd -m -d /home/agent agent && \
+    chown -R agent:agent /azp /home/agent
+
 ENV AGENT_ALLOW_RUNASROOT="true"
 USER root
 
-ENTRYPOINT [ "./start.sh" ]
+ENTRYPOINT ["./start.sh"]
