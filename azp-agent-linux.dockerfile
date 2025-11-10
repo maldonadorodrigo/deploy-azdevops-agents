@@ -23,5 +23,6 @@ RUN chown agent ./
 # USER agent
 # Another option is to run the agent as root.
 ENV AGENT_ALLOW_RUNASROOT="true"
+USER root
 
 ENTRYPOINT [ "./start.sh" ]
